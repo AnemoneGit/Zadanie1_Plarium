@@ -7,29 +7,31 @@ using System.Threading.Tasks;
 namespace Zadanie1_Plarium
 {
     class Program
-    {   //медод для решения первой части 3го задания
+    {  //при работе с массивами вводить их вручную слишком не удобно при отладке, поэтому использовал передачу готовых массивов в функции
+        //медод для решения первой части 3го задания
         //Найти расположение (индекс) наибольшего числа в массиве. Если таких чисел несколько, найти индекс первого из них.
         static int task3_1(int[] Mass)
         {
             int index = 0;
-            for (int i = 0; i < Mass.Length; i++) 
+            for (int i = 0; i < Mass.Length; i++) //просто проходим по массиву и ищем наибольший, если элементы равны то новый индекс записываться не будет
             {
                 if (Mass[i] > Mass[index]) index = i;
             }
             return index;
         }
         //медод для решения второй части 3го задания
-        //Даны два возрастающих целочисленных массива: x длиной k и y длиной m. Найти количество общих элементов в этих массивах (то есть количество тех целых t, для которых t=x[i]=y[j] для некоторых i и j)
+        /*Даны два возрастающих целочисленных массива: x длиной k и y длиной m. 
+         * Найти количество общих элементов в этих массивах (то есть количество тех целых t, для которых t=x[i]=y[j] для некоторых i и j)*/
         static int task3_2(int[] Mass, int[] Mass2)
         {
             int counter = 0;
             int t=Mass[0]-1;
             for (int i = 0; i < Mass.Length; i++)
                 for (int j = 0; j < Mass2.Length; j++)
-                    if (Mass[i] == Mass2[j] && t!=Mass[i] && t != Mass2[j])
+                    if (Mass[i] == Mass2[j] && t!=Mass[i] && t != Mass2[j])//новый элемент посчитаеться только один раз
                     { 
                         counter++;
-                        t = Mass[i];
+                        t = Mass[i];//эта переменная запоминает какой элемент был уже учтен и обеспечивает избегание повторений
                     }
                     return counter;
         }
@@ -37,51 +39,52 @@ namespace Zadanie1_Plarium
         /*Даны заданное слово и непустая последовательность слов (одномерный символьный массив): между словами запятые или пробелы, в конце точка. 
          * В словах могут встретиться ошибки – переставлены две соседние буквы, заменена одна буква, пропущена одна буква. 
          * Требуется найти в последовательности слов все слова, из которых могло бы получиться заданное слово в результате одной ошибки. Не использовать строковые функции*/
-     static void test(string test, string Shec)
+     static void test(string test, string Shec)// метод проверки соответствия слова параметрам задачи
         {
-            char[] IsxodSl = Shec.ToCharArray();
+            char[] IsxodSl = Shec.ToCharArray();//переводим исходное и искомое слово в массив символов
             char[] TestSlovo = test.ToCharArray();
-            bool T = true;
+            bool T = true;//если по итогу работы алгоритма переменная будет истинной, то проверяемое слово удовлетворяет условиям
             if (IsxodSl.Length != TestSlovo.Length)
             {
                 if (IsxodSl.Length - TestSlovo.Length == 1)
                     for (int i = 0; i < TestSlovo.Length; i++)
                     {
-                        if (IsxodSl[i] != TestSlovo[i] && IsxodSl[i + 1] != TestSlovo[i]) T = false;
+                        if (IsxodSl[i] != TestSlovo[i] && IsxodSl[i + 1] != TestSlovo[i]) T = false;//отбрасываем когда слово имеет 1 пропущенную но несоответствует другим факторам
 
                     }
-                else T = false;
+                else T = false;//отбрасываем когда слово имеет разницу в размере и не соответсвует условию о пропуске 1 буквы
             }
             else {
                 int miss = 0, index1=0;
-                for (int i = 0; i < IsxodSl.Length; i++)
+                for (int i = 0; i < IsxodSl.Length; i++)//размерности слов одинаковы проходим по буквам и проверяем, ошибки записываем в переменную
                 {
                     if (IsxodSl[i] != TestSlovo[i])
                     {
                         miss++;index1 = i;
                     }
                 }
-                if (miss > 2)
+                if (miss > 2)//если ошибок больше 2 отбрасываем слово
                 {
                     T = false;
                 }
                 else if (miss == 2)
                 {
-                    if(IsxodSl[index1]!=TestSlovo[index1-1] || IsxodSl[index1-1] != TestSlovo[index1]) T = false;
+                    if(IsxodSl[index1]!=TestSlovo[index1-1] || IsxodSl[index1-1] != TestSlovo[index1]) T = false;//если ошибок две, но они не соответсвуют условию о перестановке местами
                 }
             }
 
-            if(T) Console.WriteLine($"{test}");
+            if(T) Console.WriteLine($"{test}");// если переменная истина то тестируемое слово имеет 1 оговоренную в условии ощибку
             
         }
         
-        static void task3_3(string Mass, string Mass2)
+        static void task3_3(string Mass, string Mass2)//в этом методе строка должна разбиться на слова чтоб потом их проверить
         {
 
             string[] split = Mass2.Split(new Char[] { ' ', ',', '.','\t' });
-            foreach (string s in split)
+            foreach (string s in split)//после разбиения строки запускаем метод проверки каждого слова
                 test(s,Mass);
         }
+       
         //медод для решения четвертой части 3го задания
         /*Дана целочисленная прямоугольная матрица. Определить:
          *сумму элементов в тех строках, которые содержат хотя бы один отрицательный элемент;
@@ -91,35 +94,35 @@ namespace Zadanie1_Plarium
         {
             bool Test = true;
             int min = 0, max=0, summ=0;            
-            int stroc = Mass.GetLength(0);
-            int stolb = Mass.GetLength(1);
+            int stroc = Mass.GetLength(0);//определяем число строк
+            int stolb = Mass.GetLength(1);//число столбцов
             for (int i=0; i < stroc; i++) {
                 summ = 0; Test = false;
                 for (int j = 0; j < stolb; j++)
                 {
-                    summ += Mass[i, j];
-                    if(Mass[i,j]<0) Test = true;
+                    summ += Mass[i, j];//считаем сумму в каждой строке
+                    if(Mass[i,j]<0) Test = true;//если в ней есть отрицательный элемент то выведем результат
                 }
                 if (Test) Console.WriteLine($"Сумма элементов в строке {i} равна {summ}");
             }
 
-
+            //для определения следовой точки нам необходимо в каждой строке найти минимальный элемент, а затем проверить является ли он максимальным в данном столбце
             for (int i = 0; i < stroc; i++)
             {
                 Test = true;
                 min = i; max = 0;
-                for (int j = 0; j < stolb; j++)
+                for (int j = 0; j < stolb; j++)//цикл по поиску максимального элемента
                 {
                     if (Mass[i, j] < Mass[min,max]) {      
-                        min = i; max = j;
+                        min = i; max = j;//запоминаем координаты возможной следовой точки
                     }
                 }
 
-                for(int k = 0; k < stroc; k++)
+                for(int k = 0; k < stroc; k++)//циклом проходим по столбцу найденого элемента
                 {
-                    if (Mass[min, max] < Mass[k, max]) Test = false;
+                    if (Mass[min, max] < Mass[k, max]) Test = false;//если нашли элемент больше искомого то точка не является следовой
                 }
-                if(Test) Console.WriteLine($"Элемент:{Mass[min,max]} с координатами {min} и {max} следовой точкой");
+                if(Test) Console.WriteLine($"Элемент:{Mass[min,max]} с координатами {min} и {max} следовой точкой");//вывод найденых следовых точек
             }
         }
 
