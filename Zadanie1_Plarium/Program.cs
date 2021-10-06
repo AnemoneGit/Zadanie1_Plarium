@@ -37,24 +37,50 @@ namespace Zadanie1_Plarium
         /*Даны заданное слово и непустая последовательность слов (одномерный символьный массив): между словами запятые или пробелы, в конце точка. 
          * В словах могут встретиться ошибки – переставлены две соседние буквы, заменена одна буква, пропущена одна буква. 
          * Требуется найти в последовательности слов все слова, из которых могло бы получиться заданное слово в результате одной ошибки. Не использовать строковые функции*/
-       
-        
+     static void test(string test, string Shec)
+        {
+            char[] IsxodSl = Shec.ToCharArray();
+            char[] TestSlovo = test.ToCharArray();
+            bool T = true;
+            if (IsxodSl.Length != TestSlovo.Length)
+            {
+                if (IsxodSl.Length - TestSlovo.Length == 1)
+                    for (int i = 0; i < TestSlovo.Length; i++)
+                    {
+                        if (IsxodSl[i] != TestSlovo[i] && IsxodSl[i + 1] != TestSlovo[i]) T = false;
+
+                    }
+                else T = false;
+            }
+            else {
+                int miss = 0, index1=0;
+                for (int i = 0; i < IsxodSl.Length; i++)
+                {
+                    if (IsxodSl[i] != TestSlovo[i])
+                    {
+                        miss++;index1 = i;
+                    }
+                }
+                if (miss > 2)
+                {
+                    T = false;
+                }
+                else if (miss == 2)
+                {
+                    if(IsxodSl[index1]!=TestSlovo[index1-1] || IsxodSl[index1-1] != TestSlovo[index1]) T = false;
+                }
+            }
+
+            if(T) Console.WriteLine($"{test}");
+            
+        }
         
         static void task3_3(string Mass, string Mass2)
         {
-            //string[] Test = " ";
-            //int j = 0;
-            //for(int i = 0; Mass2[i] != '.'; i++)
-            //{
-            //    if(Mass2[i]!=' ' || Mass2[i] != ',')
-            //    {
-            //        Test += Mass2[i];
 
-            //    }
-               
-            //}
-
-            
+            string[] split = Mass2.Split(new Char[] { ' ', ',', '.','\t' });
+            foreach (string s in split)
+                test(s,Mass);
         }
         //медод для решения четвертой части 3го задания
         /*Дана целочисленная прямоугольная матрица. Определить:
@@ -105,7 +131,7 @@ namespace Zadanie1_Plarium
             int[] y = { -1,3,3,7,9,9,9,12,13,34,34,34 };
             Console.WriteLine($"Вывод по заданию 2: Количество одинаковых эллементов: {task3_2(x,y)}");
             string Slovo = "Slovo";
-            string Text = "Sloovo Slooro Soco klovo slovo SLOVO Slovo Skovo,Solvo.";
+            string Text = "Sloovo Slooro Sovo klovo slovo SLOVO Slovo Skovo,Solvo.";
             Console.WriteLine($"Вывод по заданию 3:");
             task3_3(Slovo,Text);
             int[,] Mass = { {-3,9,2,1 },{7,8,5,6 },{4,7,3,5 },{5,6,1,-7 } };
