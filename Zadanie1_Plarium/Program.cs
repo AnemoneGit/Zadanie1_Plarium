@@ -79,10 +79,24 @@ namespace Zadanie1_Plarium
         
         static void task3_3(string Mass, string Mass2)//в этом методе строка должна разбиться на слова чтоб потом их проверить
         {
+            //разбить строку можно при помощи метода Split или методами массивов, ниже приведены оба варианта 
 
-            string[] split = Mass2.Split(new Char[] { ' ', ',', '.','\t' });
-            foreach (string s in split)//после разбиения строки запускаем метод проверки каждого слова
-                test(s,Mass);
+            //string[] split = Mass2.Split(new Char[] { ' ', ',', '.','\t' });
+            //foreach (string s in split)
+            //    test(s,Mass);
+            
+            string s = " ,.";
+            string slovo = "";
+            for (int i = 0; i < Mass2.Length; i++)
+            {
+                if (Mass2[i] == s[0] || Mass2[i] == s[1] || Mass2[i]==s[2])
+                {
+                    test(slovo, Mass);//отправляем слово на проверку
+                    slovo = "";//обнуляем строку чтоб записать в нее новое слово
+                }
+                else slovo += Mass2[i];
+
+            }
         }
        
         //медод для решения четвертой части 3го задания
